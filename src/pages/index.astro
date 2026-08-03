@@ -23,13 +23,21 @@ import '../styles/global.css';
     <!-- Hero -->
     <section class="hero">
       <div class="container reveal-stagger">
-        <img
-          src="/images/balloon.gif"
-          alt="A balloon floating upward before snapping free"
-          class="hero-gif reveal"
-          width="480"
-          height="270"
-        />
+        <video
+          class="hero-video reveal"
+          width="1280"
+          height="720"
+          poster="/images/disaster-black-hole-poster.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-hidden="true"
+          tabindex="-1"
+        >
+          <source src="/images/disaster-black-hole-loop.mp4" type="video/mp4" />
+        </video>
         <h1 class="brand-name reveal">
           <span class="dis">dis</span>ASTER
         </h1>
@@ -77,6 +85,13 @@ import '../styles/global.css';
   <!-- Scroll Reveal Observer -->
   <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
+      const heroVideo = document.querySelector('.hero-video');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      if (heroVideo && reducedMotion.matches) {
+        heroVideo.pause();
+      }
+
       const reveals = document.querySelectorAll('.reveal');
       if (!reveals.length) return;
 
@@ -103,12 +118,15 @@ import '../styles/global.css';
     text-align: center;
   }
 
-  .hero-gif {
+  .hero-video {
+    display: block;
     margin: 0 auto 40px;
-    max-width: 480px;
+    max-width: 720px;
     width: 100%;
     border-radius: var(--radius);
-    aspect-ratio: 480 / 270;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: #08080e;
   }
 
   .brand-name {
@@ -210,7 +228,7 @@ import '../styles/global.css';
       padding-top: 48px;
     }
 
-    .hero-gif {
+    .hero-video {
       max-width: 100%;
       margin-bottom: 28px;
     }
