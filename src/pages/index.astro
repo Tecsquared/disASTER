@@ -22,25 +22,42 @@ import '../styles/global.css';
 
     <!-- Hero -->
     <section class="hero">
-      <div class="container reveal-stagger">
-        <video
-          class="hero-video reveal"
-          width="1280"
-          height="720"
-          poster="/images/disaster-black-hole-poster.jpg"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="metadata"
-          aria-hidden="true"
-          tabindex="-1"
-        >
-          <source src="/images/disaster-black-hole-loop.mp4" type="video/mp4" />
-        </video>
+      <div class="container hero-container reveal-stagger">
+        <div class="hero-media reveal">
+          <video
+            id="hero-video"
+            class="hero-video"
+            width="1280"
+            height="720"
+            poster="/images/disaster-black-hole-poster.jpg"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-label="Animated black hole with learning objects orbiting it"
+          >
+            <source src="/images/disaster-black-hole-loop.mp4" type="video/mp4" />
+          </video>
+          <button
+            class="video-toggle"
+            type="button"
+            aria-controls="hero-video"
+            aria-label="Pause animation"
+            data-video-toggle
+          >
+            <span class="video-toggle-icon" aria-hidden="true">&#8545;</span>
+          </button>
+        </div>
         <p class="tagline reveal">
           From a language teacher who never stopped being a learner
         </p>
+        <a class="hero-cta reveal" href="#subscribe">
+          Join the constellation <span aria-hidden="true">&darr;</span>
+        </a>
+        <div class="orbit-divider reveal" aria-hidden="true">
+          <span>&#10022;</span>
+        </div>
       </div>
     </section>
 
@@ -60,11 +77,14 @@ import '../styles/global.css';
     </section>
 
     <!-- Subscribe -->
-    <section class="subscribe">
+    <section class="subscribe" id="subscribe" aria-labelledby="subscribe-heading">
       <div class="subscribe-inner reveal">
-        <h2 class="subscribe-heading">
+        <h2 class="subscribe-heading" id="subscribe-heading">
           Join <em>the</em> constellation
         </h2>
+        <p class="subscribe-copy">
+          Short notes on language, learning, AI, and the beautiful mess of teaching.
+        </p>
         <div id="audienceful-5qfwcu"></div>
       </div>
     </section>
@@ -83,10 +103,32 @@ import '../styles/global.css';
   <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
       const heroVideo = document.querySelector('.hero-video');
+      const videoToggle = document.querySelector('[data-video-toggle]');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
       if (heroVideo && reducedMotion.matches) {
         heroVideo.pause();
+      }
+
+      const syncVideoToggle = () => {
+        if (!heroVideo || !videoToggle) return;
+        const isPaused = heroVideo.paused;
+        videoToggle.setAttribute('aria-label', isPaused ? 'Play animation' : 'Pause animation');
+        const icon = videoToggle.querySelector('.video-toggle-icon');
+        if (icon) icon.textContent = isPaused ? '\u25B6' : '\u2161';
+      };
+
+      if (heroVideo && videoToggle) {
+        videoToggle.addEventListener('click', () => {
+          if (heroVideo.paused) {
+            heroVideo.play();
+          } else {
+            heroVideo.pause();
+          }
+        });
+        heroVideo.addEventListener('play', syncVideoToggle);
+        heroVideo.addEventListener('pause', syncVideoToggle);
+        syncVideoToggle();
       }
 
       const reveals = document.querySelectorAll('.reveal');
@@ -110,20 +152,60 @@ import '../styles/global.css';
 <style>
   /* ===== Hero ===== */
   .hero {
-    padding-top: 80px;
-    padding-bottom: 40px;
+    padding-top: 64px;
+    padding-bottom: 28px;
     text-align: center;
+  }
+
+  .hero-container {
+    max-width: 840px;
+  }
+
+  .hero-media {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto 28px;
   }
 
   .hero-video {
     display: block;
-    margin: 0 auto 28px;
-    max-width: 720px;
     width: 100%;
+    height: auto;
     border-radius: var(--radius);
     aspect-ratio: 16 / 9;
     object-fit: cover;
     background: #08080e;
+  }
+
+  .video-toggle {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(214, 179, 106, 0.72);
+    border-radius: 999px;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.72);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+  }
+
+  .video-toggle:hover {
+    border-color: var(--color-gold);
+    background: rgba(0, 0, 0, 0.9);
+    transform: translateY(-1px);
+  }
+
+  .video-toggle:focus-visible,
+  .hero-cta:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
   }
 
   .tagline {
@@ -136,20 +218,64 @@ import '../styles/global.css';
     margin: 0 auto;
   }
 
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+    padding: 10px 17px;
+    border: 1px solid rgba(214, 179, 106, 0.68);
+    border-radius: 999px;
+    color: var(--color-gold);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+  }
+
+  .hero-cta:hover {
+    color: #000000;
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+  }
+
+  .orbit-divider {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 180px;
+    margin: 34px auto 0;
+    color: var(--color-gold);
+    font-size: 11px;
+  }
+
+  .orbit-divider::before,
+  .orbit-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(214, 179, 106, 0.7));
+  }
+
+  .orbit-divider::after {
+    transform: scaleX(-1);
+  }
+
   /* ===== Pitch ===== */
   .pitch {
-    padding: 20px 0 60px;
+    padding: 12px 0 64px;
     text-align: center;
   }
 
   .pitch-text {
     font-family: var(--font-body);
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 400;
     color: var(--color-text);
-    max-width: 480px;
-    margin: 0 auto 1.2em;
-    line-height: 1.7;
+    max-width: 540px;
+    margin: 0 auto 1.4em;
+    line-height: 1.78;
     text-align: left;
   }
 
@@ -160,7 +286,7 @@ import '../styles/global.css';
   .pitch-highlight {
     font-size: 22px;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--color-gold);
     text-align: center;
   }
 
@@ -170,12 +296,15 @@ import '../styles/global.css';
 
   /* ===== Subscribe (adapted from DamienHerlihy) ===== */
   .subscribe {
-    background: var(--color-black);
-    border-radius: var(--radius);
-    padding: 48px 40px;
+    scroll-margin-top: 32px;
+    background: #090909;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 54px 44px;
     text-align: center;
-    max-width: 480px;
-    margin: 0 auto;
+    max-width: 560px;
+    margin: 0 auto 72px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(214, 179, 106, 0.08);
   }
 
   .subscribe-inner {
@@ -188,7 +317,7 @@ import '../styles/global.css';
     font-family: var(--font-body);
     font-size: 40px;
     font-weight: 700;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
     line-height: 1.15;
   }
 
@@ -198,10 +327,21 @@ import '../styles/global.css';
     font-weight: 400;
   }
 
+  .subscribe-copy {
+    max-width: 420px;
+    margin: 0 auto 28px;
+    color: var(--color-text-light);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
   /* ===== Footer ===== */
   .footer-whisper {
     text-align: center;
-    padding: 48px var(--content-padding);
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 30px var(--content-padding) 36px;
+    border-top: 1px solid var(--color-border);
     color: var(--color-text-light);
     font-size: 14px;
   }
@@ -209,10 +349,11 @@ import '../styles/global.css';
   /* ===== Responsive ===== */
   @media (max-width: 768px) {
     .hero {
-      padding-top: 48px;
+      padding-top: 32px;
+      padding-bottom: 24px;
     }
 
-    .hero-video {
+    .hero-media {
       max-width: 100%;
       margin-bottom: 24px;
     }
@@ -222,20 +363,42 @@ import '../styles/global.css';
       max-width: 440px;
     }
 
+    .orbit-divider {
+      margin-top: 28px;
+    }
+
+    .pitch {
+      padding-bottom: 48px;
+    }
+
+    .pitch-text {
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
     .subscribe {
-      border-radius: 0;
+      border-radius: 12px;
       padding: 40px 24px;
-      margin: 0;
+      margin: 0 20px 56px;
     }
 
     .subscribe-heading {
       font-size: 28px;
     }
+
+    .footer-whisper {
+      margin: 0 20px;
+      padding-inline: 0;
+    }
   }
 
   @media (max-width: 480px) {
-    .pitch-text {
-      font-size: 16px;
+    .tagline {
+      font-size: 20px;
+    }
+
+    .hero-cta {
+      font-size: 12px;
     }
   }
 </style>
