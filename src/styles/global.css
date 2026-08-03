@@ -1,10 +1,10 @@
 /* ===== Design Tokens ===== */
 :root {
-  --color-bg: #ffffff;
+  --color-bg: #000000;
   --color-black: #000000;
-  --color-text: rgb(85, 85, 85);
-  --color-text-light: rgb(130, 130, 130);
-  --color-border: #e8e8e8;
+  --color-text: #ffffff;
+  --color-text-light: #ffffff;
+  --color-border: #2a2a2a;
 
   --font-body: 'Manrope', sans-serif;
   --font-accent: 'Playfair Display', serif;
@@ -24,6 +24,7 @@
 }
 
 html {
+  background-color: var(--color-bg);
   scroll-behavior: smooth;
 }
 
