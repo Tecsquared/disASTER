@@ -1,0 +1,8 @@
+# disASTER
+
+> A short newsletter by Damien Herlihy on language, learning, and the beautiful mess of teaching.
+
+## Pages
+
+- [Home](https://dis-aster.vercel.app/): what disASTER is, and the subscribe form
+- [Privacy](https://dis-aster.vercel.app/privacy): what the site collects (your email, only if you subscribe), what it doesn't, and how to leave
