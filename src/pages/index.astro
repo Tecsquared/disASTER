@@ -107,7 +107,7 @@ import '../styles/global.css';
 
   <!-- Footer -->
   <footer class="footer-whisper">
-    <p>From Damien Herlihy — teacher, learner, maker.</p>
+    <p>From Damien Herlihy — teacher, learner, maker. &middot; <a class="footer-link" href="/privacy">Privacy</a></p>
   </footer>
 
   <!-- Audienceful -->
@@ -394,6 +394,16 @@ import '../styles/global.css';
     border-top: 1px solid var(--color-border);
     color: var(--color-text-light);
     font-size: 14px;
+  }
+
+  .footer-whisper .footer-link {
+    color: var(--color-text-light);
+    text-decoration: underline;
+  }
+
+  .footer-whisper .footer-link:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
   }
 
   /* ===== Responsive ===== */
